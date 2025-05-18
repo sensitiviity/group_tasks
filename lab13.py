@@ -92,3 +92,51 @@ except Exception as e:
 # 1. Додайте ще 2 нових студентів до JSON файлу
 # 2. Реалізуйте перевірку на існування файлів перед читанням
 # 3. Додайте функцію для виведення статистики (кількість студентів за курсами)
+
+#Конопля Вікторія
+# 1. Перевірка існування JSON перед читанням
+import os
+if os.path.exists(json_file):
+    try:
+        with open(json_file, mode="r", encoding="utf-8") as f:
+            students_data = json.load(f)
+
+        # 2. Додаємо ще двох студентів
+        more_students = [
+            {"Прізвище": "Мельник", "Ім'я": "Ігор", "Курс": 1, "Група": "КН-42"},
+            {"Прізвище": "Тарасенко", "Ім'я": "Юлія", "Курс": 2, "Група": "КН-31"}
+        ]
+        students_data.extend(more_students)
+
+        # Запис назад у JSON
+        with open(json_file, mode="w", encoding="utf-8") as f:
+            json.dump(students_data, f, ensure_ascii=False, indent=4)
+
+        print("Додано ще 2 студенти до JSON-файлу.")
+
+        # 3. Функція: статистика за курсами
+        def show_course_stats(data):
+            stats = {}
+            for student in data:
+                try:
+                    course = int(student["Курс"])  # гарантуємо, що це int
+                    stats[course] = stats.get(course, 0) + 1
+                except ValueError:
+                    print(f"Помилка курсу у записі: {student}")
+    
+            print("\nСтатистика студентів за курсами:")
+            for course in sorted(stats):
+                count = stats[course]
+                print(f"Курс {course}: {count} студент{'и' if count != 1 else ''}")
+        # Виклик функції
+        show_course_stats(students_data)
+
+    except Exception as e:
+        print("Помилка при обробці JSON:", e)
+else:
+    print("Файл students.json не знайдено. Спочатку запустіть попередній код.")
+#наступний студент повинен реалізувати:
+#Додати у програму можливість видалення студента за прізвищем
+#Додати ще 2 нових студенти до файлу students.json
+
+
